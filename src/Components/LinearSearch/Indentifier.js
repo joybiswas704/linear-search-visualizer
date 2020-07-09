@@ -10,6 +10,7 @@ const Identifier = (props) => {
           width: "2rem",
           display: "inline-block",
           margin: "0 1rem",
+          verticalAlign: "middle",
         }}
       ></div>
       <p style={{ display: "inline-block" }}>{props.title}</p>

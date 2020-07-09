@@ -1,12 +1,13 @@
 .node {
   height: 6rem;
+  width: 6rem;
   background-color: aquamarine;
   padding: 1rem;
   display: inline-block;
   font-size: 2rem;
   border: 0.3rem solid black;
-  margin: 0 0.3rem;
-  transition: all 0.4s;
+  margin: 0.3rem 0.3rem;
+  transition: all 0.8s;
 }
 
 .nodeVisited {
@@ -16,5 +17,7 @@
 .nodeFound {
   background-color: darkgreen;
   height: 9rem;
+  width: 9rem;
+  font-size: 3rem;
   padding: 2rem;
 }
