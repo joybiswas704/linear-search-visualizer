@@ -143,14 +143,3 @@ class LinearSearch extends Component {
 }
 
 export default LinearSearch;
-
-// <input
-//                 style={{ margin: "2rem", height: "3rem" }}
-//                 type="text"
-//                 id="userInput"
-//                 placeholder="Enter the number"
-//                 onChange={(event) =>
-//                   this.setState({ input: Number(event.target.value) })
-//                 }
-//                 required
-//               ></input>
