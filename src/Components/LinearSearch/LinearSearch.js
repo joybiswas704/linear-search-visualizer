@@ -1,6 +1,15 @@
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Container, Col, Row, FormControl } from "react-bootstrap";
+import RangeSlider from "react-bootstrap-range-slider";
+import "react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css";
+import {
+  Button,
+  Container,
+  Col,
+  Row,
+  FormControl,
+  Form,
+} from "react-bootstrap";
 import Node from "./Node";
 import Identifier from "./Indentifier";
 import styles from "./LinearSearch.module.css";
@@ -14,6 +23,7 @@ class LinearSearch extends Component {
       isReset: false,
       timeTaken: 0,
       isFound: false,
+      speed: 0,
     };
     this.randomNumberGenerator = this.randomNumberGenerator.bind(this);
     this.checkHandler = this.checkHandler.bind(this);
@@ -42,7 +52,7 @@ class LinearSearch extends Component {
     const startTime = new Date();
 
     for (let i = 0; i < 18; i++) {
-      await this.sleep(400);
+      await this.sleep(400 + this.state.speed * 10);
       if (this.state.input === this.state.nodes[i].value) {
         const endTime = new Date();
         let timeDiff = endTime - startTime;
@@ -80,6 +90,7 @@ class LinearSearch extends Component {
       isReset: !this.state.isReset,
       timeTaken: 0,
       isFound: false,
+      speed: 0,
     });
   };
 
@@ -131,7 +142,7 @@ class LinearSearch extends Component {
           </Col>
         </Row>
         <Row>
-          <Col xs={12}>
+          <Col>
             <div>
               <Identifier title="Not visited yet" color="aquamarine" />
               <Identifier title="Visited" color="coral" />
@@ -140,7 +151,7 @@ class LinearSearch extends Component {
           </Col>
         </Row>
         <Row>
-          <Col>
+          <Col style={{ padding: "2rem 0" }}>
             <Button
               variant="success"
               onClick={this.checkHandler}
@@ -149,16 +160,32 @@ class LinearSearch extends Component {
               Visualize
             </Button>
             <Button
-              variant="primary"
+              variant="dark"
               onClick={this.resetHandler}
               style={{ margin: "1rem" }}
             >
               Reset
             </Button>
           </Col>
+          <Col style={{ padding: "2rem 0" }}>
+            <Form.Label>Slow-mo</Form.Label>
+            <RangeSlider
+              variant="dark"
+              value={this.state.speed}
+              onChange={(changeEvent) =>
+                this.setState({ speed: Number(changeEvent.target.value) })
+              }
+            />
+          </Col>
         </Row>
         <Row>
-          <Col>
+          <Col
+            style={{
+              padding: "2rem 0",
+              border: ".3rem solid black",
+              margin: "0 2rem",
+            }}
+          >
             <h3>{`Runtime: ${this.state.timeTaken} seconds`}</h3>
             <h3>
               {this.state.isFound ? "Status: Found" : "Status: Not Found"}
