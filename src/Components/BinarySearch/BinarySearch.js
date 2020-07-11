@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Container, Col, Row, FormControl } from "react-bootstrap";
-import Node from "./Node";
-import Identifier from "./Indentifier";
-import styles from "./LinearSearch.module.css";
+import Node from "../LinearSearch/Node";
+import Identifier from "../LinearSearch/Indentifier";
+import styles from "./BinarySearch.module.css";
 
-class LinearSearch extends Component {
+class BinarySearch extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,21 +16,33 @@ class LinearSearch extends Component {
       isFound: false,
     };
     this.randomNumberGenerator = this.randomNumberGenerator.bind(this);
-    this.checkHandler = this.checkHandler.bind(this);
     this.nodeGenerator = this.nodeGenerator.bind(this);
     this.resetHandler = this.resetHandler.bind(this);
-    this.sleep = this.sleep.bind(this);
+    this.checkHandler = this.checkHandler.bind(this);
   }
 
   randomNumberGenerator = () => {
     const randomNumberArray = [];
+
     for (let i = 0; i < 18; i++) {
       let nodeObject = { isVisited: false, isFound: false };
       nodeObject["value"] = Math.floor(Math.random() * 100);
       randomNumberArray.push(nodeObject);
     }
+    randomNumberArray.sort((a, b) => a.value - b.value);
+
     console.log(randomNumberArray);
     return randomNumberArray;
+  };
+
+  resetHandler = () => {
+    this.setState({
+      nodes: this.randomNumberGenerator(),
+      input: "",
+      isReset: !this.state.isReset,
+      timeTaken: 0,
+      isFound: false,
+    });
   };
 
   sleep = (milliseconds) => {
@@ -40,24 +52,33 @@ class LinearSearch extends Component {
   checkHandler = async () => {
     const tempState = { ...this.state };
     const startTime = new Date();
-
-    for (let i = 0; i < 18; i++) {
+    let start = 0;
+    let end = tempState.nodes.length - 1;
+    while (start <= end) {
+      let mid = Math.floor((start + end) / 2);
       await this.sleep(400);
-      if (this.state.input === this.state.nodes[i].value) {
+      if (this.state.nodes[mid].value === this.state.input) {
         const endTime = new Date();
         let timeDiff = endTime - startTime;
         timeDiff /= 1000;
         let timeDiffInSeconds = Math.round(timeDiff);
         tempState.timeTaken = timeDiffInSeconds;
-        tempState.nodes[i].isVisited = true;
-        tempState.nodes[i].isFound = true;
+        tempState.nodes[mid].isVisited = true;
+        tempState.nodes[mid].isFound = true;
         tempState.isFound = true;
         this.setState({
           ...tempState,
         });
         return console.log(`Found. Time taken: ${this.state.timeTaken} sec`);
+      } else if (this.state.nodes[mid].value < this.state.input) {
+        start = mid + 1;
+        tempState.nodes[mid].isVisited = true;
+        this.setState({
+          ...tempState,
+        });
       } else {
-        tempState.nodes[i].isVisited = true;
+        end = mid - 1;
+        tempState.nodes[mid].isVisited = true;
         this.setState({
           ...tempState,
         });
@@ -71,16 +92,6 @@ class LinearSearch extends Component {
       timeTaken: timeDiffInSeconds,
     });
     return console.log(`Not Found. Time taken: ${this.state.timeTaken} sec`);
-  };
-
-  resetHandler = () => {
-    this.setState({
-      nodes: this.randomNumberGenerator(),
-      input: "",
-      isReset: !this.state.isReset,
-      timeTaken: 0,
-      isFound: false,
-    });
   };
 
   nodeGenerator = () => {
@@ -104,7 +115,7 @@ class LinearSearch extends Component {
         <Row>
           <Col xs={12}>
             <h1 style={{ fontSize: "3rem", letterSpacing: ".2rem" }}>
-              Linear Search Visualizer
+              Binary Search Visualizer
             </h1>
           </Col>
         </Row>
@@ -170,4 +181,4 @@ class LinearSearch extends Component {
   }
 }
 
-export default LinearSearch;
+export default BinarySearch;
