@@ -18,12 +18,13 @@ class LinearSearch extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      nodes: this.randomNumberGenerator(),
+      nodes: this.randomNumberGenerator(10),
       input: "",
       isReset: false,
       timeTaken: 0,
       isFound: false,
-      speed: 0,
+      speed: 50,
+      size: 10,
     };
     this.randomNumberGenerator = this.randomNumberGenerator.bind(this);
     this.checkHandler = this.checkHandler.bind(this);
@@ -32,9 +33,9 @@ class LinearSearch extends Component {
     this.sleep = this.sleep.bind(this);
   }
 
-  randomNumberGenerator = () => {
+  randomNumberGenerator = (size) => {
     const randomNumberArray = [];
-    for (let i = 0; i < 18; i++) {
+    for (let i = 0; i < size; i++) {
       let nodeObject = { isVisited: false, isFound: false };
       nodeObject["value"] = Math.floor(Math.random() * 100);
       randomNumberArray.push(nodeObject);
@@ -51,8 +52,8 @@ class LinearSearch extends Component {
     const tempState = { ...this.state };
     const startTime = new Date();
 
-    for (let i = 0; i < 18; i++) {
-      await this.sleep(400 + this.state.speed * 10);
+    for (let i = 0; i < this.state.size; i++) {
+      await this.sleep(400 - this.state.speed * 2);
       if (this.state.input === this.state.nodes[i].value) {
         const endTime = new Date();
         let timeDiff = endTime - startTime;
@@ -85,12 +86,13 @@ class LinearSearch extends Component {
 
   resetHandler = () => {
     this.setState({
-      nodes: this.randomNumberGenerator(),
+      nodes: this.randomNumberGenerator(10),
       input: "",
       isReset: !this.state.isReset,
       timeTaken: 0,
       isFound: false,
-      speed: 0,
+      speed: 50,
+      size: 10,
     });
   };
 
@@ -167,8 +169,25 @@ class LinearSearch extends Component {
               Reset
             </Button>
           </Col>
-          <Col style={{ padding: "2rem 0" }}>
-            <Form.Label>Slow-mo</Form.Label>
+          <Col style={{ padding: "2rem 1rem" }}>
+            <Form.Label>Size</Form.Label>
+            <RangeSlider
+              variant="dark"
+              value={this.state.size}
+              onChange={(changeEvent) =>
+                this.setState({
+                  size: Number(changeEvent.target.value),
+                  nodes: this.randomNumberGenerator(
+                    Number(changeEvent.target.value)
+                  ),
+                  isReset: !this.state.isReset,
+                })
+              }
+            />
+          </Col>
+
+          <Col style={{ padding: "2rem 1rem" }}>
+            <Form.Label>Speed</Form.Label>
             <RangeSlider
               variant="dark"
               value={this.state.speed}
